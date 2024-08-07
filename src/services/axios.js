@@ -13,7 +13,7 @@ export class HttpError extends Error {
 
 
 const Api = axios.create({
-    baseURL: 'http://crm.infoeventz.com/api/',
+    baseURL: 'https://crm.infoeventz.com/api/',
 });
 
 Api.interceptors.request.use((config) => {
