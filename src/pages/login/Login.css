@@ -1,0 +1,28 @@
+.down-card {
+  position: relative;
+  box-shadow: 0px 0px 3px;
+  animation: 0.3s ease moveUp;
+  margin: 0px;
+  padding: 0px;
+  background-color: rgba(255, 255, 255, 0.92);
+}
+
+.login-page {
+  overflow: hidden;
+  background-image: url("/images/map-bg.png");
+  background-repeat: none;
+  background-size: cover;
+  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+.info-del-logo {
+  filter: drop-shadow(0 0 0.15rem white);
+}
+@keyframes moveUp {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
