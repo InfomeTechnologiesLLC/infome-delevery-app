@@ -18,6 +18,7 @@ function DeliverySummerySection({ today_deliveries }) {
                   customer_name={ele.customer_name}
                   sales_person={ele.sales_person}
                   key={ele.id}
+                  id={ele.id}
                 />
               );
             })

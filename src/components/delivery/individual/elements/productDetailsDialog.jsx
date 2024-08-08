@@ -4,6 +4,7 @@ import DetailItem from "./detailItem";
 function ProductDetailsDailog(props) {
   return (
     <Dialog
+      header={"Product Detail"}
       visible={props.productDialog.active}
       maximizable
       style={{ width: "97vw" }}

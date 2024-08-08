@@ -12,7 +12,7 @@ function CustomerDetailsSection(props) {
         />
         <DetailItem
           headerName={"Sales Person"}
-          content={props.details.customer_details}
+          content={props.details.customer_details.name}
         />
         <DetailItem
           headerName={"Address"}

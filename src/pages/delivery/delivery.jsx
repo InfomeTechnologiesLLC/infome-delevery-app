@@ -140,7 +140,6 @@ function DeliveryPage() {
                     do_date={ele.do_date}
                     customer_name={ele.customer_name}
                     sales_person={ele.sales_person}
-                    navigator={navigator}
                     follow_status={ele.follow_status}
                   />
                 ))}
