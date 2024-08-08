@@ -36,11 +36,14 @@ Api.interceptors.response.use((res) => {
 }, (err) => {
     const status = err?.response?.status || null;
     // if unauthorized redirect to login page
+    console.log(window.location.pathname);
 
-    if (status === 401) {
+    if (status === 401 && window.location.pathname != '/login') {
         console.log(status);
+
         window.location.href = '/login'
         toast("please login to continue", { icon: "⚠️" })
+
         // await store.dispatch(logout());
         // await store.dispatch(reset());
         // toast.info('Your session has expired. Please login');
