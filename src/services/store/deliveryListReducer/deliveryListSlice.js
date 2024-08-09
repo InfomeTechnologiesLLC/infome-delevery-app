@@ -11,6 +11,7 @@ export const DeliveryListSlice = createSlice({
             //     state.offset = 0
             // } else {
 
+
             if (action.payload.offset != null) {
                 state.offset = action.payload.offset
 
@@ -20,7 +21,7 @@ export const DeliveryListSlice = createSlice({
 
             // }
             state.list = action.payload.list
-            console.log(state.offset);
+
         }
     }
 })

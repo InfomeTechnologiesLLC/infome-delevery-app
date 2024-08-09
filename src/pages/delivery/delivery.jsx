@@ -3,7 +3,7 @@ import DeliveryList from "../../components/delivery/deliveryList";
 import StatusChangeBottomModal from "../../components/delivery/changeStatus";
 import SearchBoxModal from "../../components/delivery/searchBox";
 import Api from "/src/services/axios";
-import { InfiniteScroll } from "/src/services/utilities";
+// import { InfiniteScroll } from "/src/services/utilities";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { toastOptions } from "/src/services/toast";
@@ -12,7 +12,7 @@ import { RiSearchLine, RiFilter2Line } from "@remixicon/react";
 import { v4 as uuid4 } from "uuid";
 import { setList } from "/src/services/store/deliveryListReducer/deliveryListSlice";
 import { useSelector, useDispatch } from "react-redux";
-
+import InfiniteScroll from "react-infinite-scroll-component";
 import { Button } from "primereact/button";
 
 function DeliveryPage() {
@@ -23,7 +23,7 @@ function DeliveryPage() {
   const navigator = useNavigate();
   const [SearchBoxShow, setSearchBoxShow] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [HasMore, setHasMore] = useState(false);
+  const [HasMore, setHasMore] = useState(true);
   const dispatch = useDispatch();
   const [FilterDic, setFilterDic] = useState({
     search: null || "",
@@ -37,6 +37,7 @@ function DeliveryPage() {
     if (start) {
       dispatch(setList({ list: [], offset: 0 }));
     }
+
     Api.get("/get-deliveries", {
       params: {
         offset: start ? 0 : DeliveryListData.offset,
@@ -47,11 +48,11 @@ function DeliveryPage() {
       .then((res) => {
         let new_list = [];
         if (!start) {
-          console.log("dddd");
           new_list = [...DeliveryListData.list, ...res.data.delivery_list];
         } else {
           new_list = res.data.delivery_list;
         }
+        console.log(new_list, "new");
 
         dispatch(setList({ list: new_list }));
         setHasMore(res.data.has_more);
@@ -63,8 +64,6 @@ function DeliveryPage() {
         setLoading(false);
       });
   };
-
-  // const scroller = new InfiniteScroll(dataListsElement, fetchData);
 
   useEffect(() => {
     DeliveryListData.list.length == 0 ? fetchData(true) : setLoading(false);
@@ -122,64 +121,79 @@ function DeliveryPage() {
           {/* <Button icon="pi pi-check" /> */}
         </div>
       </div>
-
       <div
         className="mt-2 overflow-y-scroll scroll-bar-div w-100"
         style={{ height: "80vh" }}
         ref={dataListsElement}
+        id="scrollableDiv"
       >
-        {!loading ? (
-          <>
-            {DeliveryListData.list.length != 0 ? (
-              <>
-                {DeliveryListData.list.map((ele) => (
-                  <DeliveryList
-                    key={uuid4()}
-                    id={ele.id}
-                    delivery_no={ele.delivery_no}
-                    do_date={ele.do_date}
-                    customer_name={ele.customer_name}
-                    sales_person={ele.sales_person}
-                    follow_status={ele.follow_status}
-                  />
-                ))}
-                {HasMore && (
-                  <span
-                    className="text-center"
-                    onClick={() => {
-                      fetchData();
-                    }}
-                  >
-                    Load more
-                  </span>
-                )}
-              </>
-            ) : (
-              <div className="grid place-content-center	h-full">
-                <span className="text-center text-sm my-4">No result </span>
-                <Button
-                  label="Go Back"
-                  outlined
-                  size="small"
-                  severity="danger"
-                  onClick={() => {
-                    setFilterDic({ search: "", filter: {} });
-                  }}
-                />
-              </div>
-            )}
-          </>
-        ) : (
-          <div className="grid place-content-center	h-full">
+        <InfiniteScroll
+          dataLength={DeliveryListData.list.length}
+          next={fetchData}
+          hasMore={HasMore}
+          scrollableTarget="scrollableDiv"
+          endMessage={
+            <span className="text-sm flex justify-center">
+              You got all the data
+            </span>
+          }
+          className="h-full"
+          loader={
             <ProgressSpinner
-              style={{ width: "50px", height: "50px" }}
+              style={{ width: "20px", height: "20px" }}
               strokeWidth="8"
               fill="var(--surface-ground)"
               animationDuration=".5s"
               className="place-self-center flex"
             />
-          </div>
-        )}
+          }
+        >
+          {!loading ? (
+            <>
+              {DeliveryListData.list.length != 0 ? (
+                <>
+                  {DeliveryListData.list.map((ele) => (
+                    <DeliveryList
+                      key={uuid4()}
+                      id={ele.id}
+                      delivery_no={ele.delivery_no}
+                      do_date={ele.do_date}
+                      customer_name={ele.customer_name}
+                      sales_person={ele.sales_person}
+                      follow_status={ele.follow_status}
+                    />
+                  ))}
+                </>
+              ) : (
+                <div className="grid place-content-center	h-full">
+                  <span className="text-center text-sm my-4">No result </span>
+                  <Button
+                    label="Go Back"
+                    outlined
+                    size="small"
+                    severity="danger"
+                    onClick={() => {
+                      setFilterDic({ search: "", filter: {} });
+                    }}
+                  />
+                </div>
+              )}
+            </>
+          ) : (
+            <div
+              className="grid place-content-center	h-full"
+              style={{ height: "80vh" }}
+            >
+              <ProgressSpinner
+                style={{ width: "50px", height: "50px" }}
+                strokeWidth="8"
+                fill="var(--surface-ground)"
+                animationDuration=".5s"
+                className="place-self-center flex"
+              />
+            </div>
+          )}
+        </InfiniteScroll>
       </div>
       <StatusChangeBottomModal onChangeData={onChangeData} />
       <SearchBoxModal

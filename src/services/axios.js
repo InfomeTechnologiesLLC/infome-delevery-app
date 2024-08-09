@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 export class HttpError extends Error {
     constructor(message) {
-        console.log(message);
+
 
         super(message) // 'Error' breaks prototype chain here
         this.name = 'HttpError'
@@ -27,7 +27,7 @@ Api.interceptors.request.use((config) => {
 )
 
 Api.interceptors.response.use((res) => {
-    console.log(res.status);
+
 
     if (res.status == 200) {
         return res
@@ -36,10 +36,8 @@ Api.interceptors.response.use((res) => {
 }, (err) => {
     const status = err?.response?.status || null;
     // if unauthorized redirect to login page
-    console.log(window.location.pathname);
 
     if (status === 401 && window.location.pathname != '/login') {
-        console.log(status);
 
         window.location.href = '/login'
         toast("please login to continue", { icon: "⚠️" })

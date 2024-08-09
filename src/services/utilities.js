@@ -34,11 +34,11 @@ class InfiniteScroll {
             // this.element.scrollTop = this.initial_scroll.scrollTop
             // this.element.style.height = this.element.scrollHeight + 'px'
 
-            this.callback(this.offset, this.lenght).then(() => {
-                console.log('finished from fresh');
+            this.callback().then(() => {
+
                 this.loading = false
             })
-            console.log('fresh');
+
             return true
 
         }
@@ -50,7 +50,7 @@ class InfiniteScroll {
             this.loading = true
 
             this.offset += this.lenght
-            await this.callback(this.offset, this.lenght).then(() => {
+            await this.callback().then(() => {
                 console.log('finished');
 
                 setTimeout(() => {
